@@ -1,0 +1,6 @@
+pytest
+allure-pytest
+requests
+python-socketio[client]
+playwright
+pytest-playwright

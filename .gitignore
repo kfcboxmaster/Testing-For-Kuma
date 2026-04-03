@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+
+# Pytest
+.pytest_cache/
+tests/.pytest_cache/
+
+# Allure
+allure-results/
+allure-report/
+
+# Test run artifacts
+test_output.txt
+
+# Playwright
+playwright-report/
+test-results/
+
+# Uptime Kuma source (reference only, not part of the test suite)
+# uptime-kuma/
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db
