@@ -1,6 +1,11 @@
+import allure
 import requests
 
 
-def test_status_page_unknown_slug(base_url):
-    response = requests.get(f"{base_url}/api/status-page/unknown-slug")
-    assert response.status_code in [200, 404]
+@allure.feature("REST API")
+@allure.story("Status Page")
+@allure.title("Unknown status page returns valid response")
+def test_status_page_unknown_slug_returns_response(base_url):
+    response = requests.get(f"{base_url}/api/status-page/unknown-slug", timeout=10)
+
+    assert response.status_code == 200
