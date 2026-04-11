@@ -25,3 +25,6 @@ class TestSettings:
         sp.navigate()
         sp.click_tab("Security")
         assert logged_in_page.locator("text=Security").count() > 0
+
+    def faslses():
+        pass
