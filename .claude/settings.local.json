@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 tests/experimental/mock_kuma.py 3099)",
+      "Bash(curl -s http://127.0.0.1:3099/api/status-page/main)",
+      "Read(//dev/**)",
+      "Bash(wait echo *)",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code} time=%{time_total}\\\\n\" http://localhost:3001/)",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code} time=%{time_total}\\\\n\" http://localhost:3001/api/status-page/main)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/setup)",
+      "Bash(curl -s http://localhost:3001/api/entry-page)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/dashboard)",
+      "Bash(curl -s http://localhost:3001/setup)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/api/badge/1/status)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/api/status-page/heartbeat/main)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3001/api/push/abc?status=up)",
+      "Bash(chmod +x tests/experimental/performance/sample_resources.sh)",
+      "Bash(timeout 75 python3 tests/experimental/performance/load_runner.py --scenario S1 --base-url http://localhost:3001 --out tests/experimental/results)",
+      "Bash(awk -F, 'NR>1 {cnt[$3]++} END {for \\(k in cnt\\) print k, cnt[k]}' tests/experimental/results/perf_S1_normal_raw.csv)",
+      "Bash(sort -k2 -n -r)",
+      "Bash(awk -F, 'NR>1 && \\($3<200 || $3>=400\\) {cnt[$2]++} END {for \\(k in cnt\\) print k, cnt[k]}' tests/experimental/results/perf_S1_normal_raw.csv)",
+      "Bash(curl -s -o /dev/null -w \"main=%{http_code}\\\\n\" http://localhost:3001/api/status-page/main)",
+      "Bash(curl -s -o /dev/null -w \"default=%{http_code}\\\\n\" http://localhost:3001/api/status-page/default)",
+      "Bash(curl -s -o /dev/null -w \"test=%{http_code}\\\\n\" http://localhost:3001/api/status-page/test)",
+      "Bash(curl -s -o /dev/null -w \"heartbeat=%{http_code}\\\\n\" http://localhost:3001/api/status-page/heartbeat/main)",
+      "Bash(curl -s -o /dev/null -w \"heartbeat-default=%{http_code}\\\\n\" http://localhost:3001/api/status-page/heartbeat/default)",
+      "Bash(curl -s http://localhost:3001/api/status-page/heartbeat/main)",
+      "Bash(curl -s -X POST http://localhost:3001/setup -H 'Content-Type: application/json' -d '{\"username\":\"test\",\"password\":\"1q2w#E$R\"}' -w '\\\\ncode=%{http_code}\\\\n')",
+      "Bash(curl -s -X POST http://localhost:3001/api/setup -H 'Content-Type: application/json' -d '{\"username\":\"test\",\"password\":\"1q2w#E$R\"}' -w '\\\\ncode=%{http_code}\\\\n')",
+      "Bash(python3 *)",
+      "Bash(tests/experimental/performance/sample_resources.sh 6 /tmp/rstest.csv)",
+      "Read(//tmp/**)",
+      "Bash(apt list *)",
+      "Bash(apt-cache search *)",
+      "Bash(sudo apt-get *)",
+      "Bash(docker exec uptime-kuma *)"
+    ]
+  }
+}

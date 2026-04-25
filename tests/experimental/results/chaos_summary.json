@@ -1,0 +1,122 @@
+{
+  "C1": {
+    "scenario": "C1",
+    "name": "API_downtime_pause",
+    "warmup": {
+      "requests": 28,
+      "ok": 28,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 3.24,
+      "rt_p95_ms": 4.45
+    },
+    "during_fault": {
+      "requests": 8,
+      "ok": 1,
+      "errors": 7,
+      "availability_pct": 12.5,
+      "rt_avg_ms": 2193.17,
+      "rt_p95_ms": 2507.91
+    },
+    "settle": {
+      "requests": 38,
+      "ok": 38,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 1.78,
+      "rt_p95_ms": 2.43
+    },
+    "mttr_s": 0.0,
+    "raw_csv": "tests/experimental/results/chaos_C1_API_downtime_pause_raw.csv"
+  },
+  "C2": {
+    "scenario": "C2",
+    "name": "Container_crash_restart",
+    "warmup": {
+      "requests": 33,
+      "ok": 33,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 1.73,
+      "rt_p95_ms": 2.38
+    },
+    "during_fault": {
+      "requests": 59,
+      "ok": 1,
+      "errors": 58,
+      "availability_pct": 1.69,
+      "rt_avg_ms": 42.93,
+      "rt_p95_ms": 0.91
+    },
+    "settle": {
+      "requests": 58,
+      "ok": 58,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 2.91,
+      "rt_p95_ms": 5.92
+    },
+    "mttr_s": 1.01,
+    "raw_csv": "tests/experimental/results/chaos_C2_Container_crash_restart_raw.csv"
+  },
+  "C3": {
+    "scenario": "C3",
+    "name": "Network_latency_200ms",
+    "warmup": {
+      "requests": 39,
+      "ok": 39,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 3.41,
+      "rt_p95_ms": 7.02
+    },
+    "during_fault": {
+      "requests": 50,
+      "ok": 48,
+      "errors": 2,
+      "availability_pct": 96.0,
+      "rt_avg_ms": 401.42,
+      "rt_p95_ms": 423.43
+    },
+    "settle": {
+      "requests": 38,
+      "ok": 38,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 2.64,
+      "rt_p95_ms": 4.58
+    },
+    "mttr_s": 0.01,
+    "raw_csv": "tests/experimental/results/chaos_C3_Network_latency_200ms_raw.csv"
+  },
+  "C4": {
+    "scenario": "C4",
+    "name": "CPU_stress",
+    "warmup": {
+      "requests": 39,
+      "ok": 39,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 2.34,
+      "rt_p95_ms": 4.57
+    },
+    "during_fault": {
+      "requests": 136,
+      "ok": 136,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 2.78,
+      "rt_p95_ms": 7.22
+    },
+    "settle": {
+      "requests": 39,
+      "ok": 39,
+      "errors": 0,
+      "availability_pct": 100.0,
+      "rt_avg_ms": 2.51,
+      "rt_p95_ms": 4.77
+    },
+    "mttr_s": 0.0,
+    "raw_csv": "tests/experimental/results/chaos_C4_CPU_stress_raw.csv"
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "baseline": {
+    "P1_entry_page": {
+      "status": 200,
+      "marker": "{\"type\":\"entryPage\",\"entryPage\":null}",
+      "cors": "",
+      "error": ""
+    },
+    "P2_badge": {
+      "status": 200,
+      "marker": "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlin",
+      "cors": "*",
+      "error": ""
+    },
+    "P3_status_page": {
+      "status": 404,
+      "marker": "{\"status\":\"fail\",\"msg\":\"Status Page Not Found\"}",
+      "cors": "",
+      "error": ""
+    },
+    "P4_heartbeat": {
+      "status": 200,
+      "marker": "{\"heartbeatList\":{},\"uptimeList\":{}}",
+      "cors": "",
+      "error": ""
+    },
+    "P5_push_unknown": {
+      "status": 404,
+      "marker": "{\"ok\":false,\"msg\":\"Monitor not found or not active.\"}",
+      "cors": "",
+      "error": ""
+    },
+    "P6_root": {
+      "status": 302,
+      "marker": "Found. Redirecting to /dashboard",
+      "cors": "",
+      "error": ""
+    },
+    "P7_status_mixedcase": {
+      "status": 404,
+      "marker": "{\"status\":\"fail\",\"msg\":\"Status Page Not Found\"}",
+      "cors": "",
+      "error": ""
+    },
+    "P8_push_with_ping": {
+      "status": 404,
+      "marker": "{\"ok\":false,\"msg\":\"Monitor not found or not active.\"}",
+      "cors": "",
+      "error": ""
+    },
+    "P9_status_unknown_long": {
+      "status": 404,
+      "marker": "{\"status\":\"fail\",\"msg\":\"Status Page Not Found\"}",
+      "cors": "",
+      "error": ""
+    },
+    "P10_entry_via_xfh": {
+      "status": 200,
+      "marker": "{\"type\":\"entryPage\",\"entryPage\":null}",
+      "cors": "",
+      "error": ""
+    }
+  },
+  "mutants": [
+    {
+      "mutant": {
+        "id": "SPR-LOR-1",
+        "file": "/app/server/routers/status-page-router.js",
+        "operator": "LOR",
+        "description": "negate the not-found branch \u2014 slug-not-found becomes slug-found",
+        "find": "if (!statusPage) {",
+        "replace": "if (statusPage) {",
+        "occurrence": 1
+      },
+      "killed": true,
+      "survived_reason": "",
+      "probe_diffs": [
+        "P3_status_page: status 404 -> 403",
+        "P7_status_mixedcase: status 404 -> 403",
+        "P9_status_unknown_long: status 404 -> 403"
+      ],
+      "notes": "probe deviation"
+    },
+    {
+      "mutant": {
+        "id": "SPR-SDL-1",
+        "file": "/app/server/routers/status-page-router.js",
+        "operator": "SDL",
+        "description": "drop slug.toLowerCase() in /api/status-page/:slug",
+        "find": "    slug = slug.toLowerCase();\n\n    try {\n        // Get Status Page",
+        "replace": "\n    try {\n        // Get Status Page",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "SPR-CRC-1",
+        "file": "/app/server/routers/status-page-router.js",
+        "operator": "CRC",
+        "description": "shrink heartbeat cache to 0 minutes",
+        "find": "cache(\"1 minutes\")",
+        "replace": "cache(\"0 minutes\")",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "SPR-RVR-1",
+        "file": "/app/server/routers/status-page-router.js",
+        "operator": "RVR",
+        "description": "force /api/status-page/:slug to return null instead of JSON",
+        "find": "response.json(statusPageData);",
+        "replace": "response.json(null);",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "SPR-FCR-1",
+        "file": "/app/server/routers/status-page-router.js",
+        "operator": "FCR",
+        "description": "remove the sendHttpError on not-found path",
+        "find": "sendHttpError(response, \"Status Page Not Found\");",
+        "replace": "/* sendHttpError removed */;",
+        "occurrence": 1
+      },
+      "killed": true,
+      "survived_reason": "",
+      "probe_diffs": [
+        "P3_status_page: status 404 -> 0",
+        "P7_status_mixedcase: status 404 -> 0",
+        "P9_status_unknown_long: status 404 -> 0"
+      ],
+      "notes": "probe deviation"
+    },
+    {
+      "mutant": {
+        "id": "API-RVR-1",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "RVR",
+        "description": "return wrong shape for entry-page (drop type field)",
+        "find": "result.type = \"entryPage\";\n        result.entryPage = server.entryPage;",
+        "replace": "result.entryPage = server.entryPage;",
+        "occurrence": 1
+      },
+      "killed": true,
+      "survived_reason": "",
+      "probe_diffs": [
+        "P1_entry_page: body marker drift",
+        "P10_entry_via_xfh: body marker drift"
+      ],
+      "notes": "probe deviation"
+    },
+    {
+      "mutant": {
+        "id": "API-LOR-1",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "LOR",
+        "description": "negate the trustProxy condition",
+        "find": "if ((await Settings.get(\"trustProxy\")) && request.headers[\"x-forwarded-host\"]) {",
+        "replace": "if (!((await Settings.get(\"trustProxy\")) && request.headers[\"x-forwarded-host\"])) {",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "API-CRC-1",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "CRC",
+        "description": "shrink the push max-ping ceiling so any normal ping is rejected",
+        "find": "const MAX_PING_MS = 100000000000;",
+        "replace": "const MAX_PING_MS = 0;",
+        "occurrence": 1
+      },
+      "killed": true,
+      "survived_reason": "",
+      "probe_diffs": [
+        "P8_push_with_ping: body marker drift"
+      ],
+      "notes": "probe deviation"
+    },
+    {
+      "mutant": {
+        "id": "API-SDL-1",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "SDL",
+        "description": "drop allowDevAllOrigin from entry-page (CORS regressions)",
+        "find": "router.get(\"/api/entry-page\", async (request, response) => {\n    allowDevAllOrigin(response);\n",
+        "replace": "router.get(\"/api/entry-page\", async (request, response) => {\n",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "API-ROR-1",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "ROR",
+        "description": "weaken push ping range check (< 0 -> <= 0)",
+        "find": "if (ping !== null && (ping < 0 || ping > MAX_PING_MS)) {",
+        "replace": "if (ping !== null && (ping <= 0 || ping > MAX_PING_MS)) {",
+        "occurrence": 1
+      },
+      "killed": false,
+      "survived_reason": "ALL_PROBES_MATCHED_BASELINE",
+      "probe_diffs": [],
+      "notes": "probes did not detect this mutation"
+    },
+    {
+      "mutant": {
+        "id": "API-RVR-2",
+        "file": "/app/server/routers/api-router.js",
+        "operator": "RVR",
+        "description": "make push handler return 200 even when monitor missing",
+        "find": "\"Monitor not found or not active.\"",
+        "replace": "\"Always OK\"",
+        "occurrence": 1
+      },
+      "killed": true,
+      "survived_reason": "",
+      "probe_diffs": [
+        "P5_push_unknown: body marker drift",
+        "P8_push_with_ping: body marker drift"
+      ],
+      "notes": "probe deviation"
+    }
+  ]
+}
