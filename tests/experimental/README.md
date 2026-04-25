@@ -9,7 +9,8 @@ Performance, mutation, and chaos testing for Uptime Kuma.
 | `report/experimental_testing_report.md` | **The report (4–6 pages).** Read this first. |
 | `performance/test_plan.md` | Scenarios, SLOs, test-design rationale |
 | `performance/load_runner.py` | stdlib Python load generator (S1–S4) |
-| `performance/sample_resources.sh` | docker-stats sampler (CPU / memory) |
+| `performance/sample_resources.py` | docker-stats sampler (CPU / memory) — pure Python, works on Windows |
+| `performance/sample_resources.sh` | bash equivalent (Linux/macOS/Git Bash) |
 | `mutation/mutation_plan.md` | Mutation methodology + module list |
 | `mutation/mutation_runner.py` | Container-injection mutation harness |
 | `mutation/manual_mutants.md` | Static analysis for auth-bound modules |
@@ -24,6 +25,7 @@ Performance, mutation, and chaos testing for Uptime Kuma.
 ## Run everything from scratch
 
 Prereqs: Docker + Python 3.10+. No `pip` packages required.
+Works natively on **Linux**, **macOS**, and **Windows** (with Docker Desktop) — no WSL needed.
 
 ```bash
 docker run -d --restart=always --name uptime-kuma \

@@ -22,10 +22,11 @@ docker --version
 ```
 
 Required:
-- **Docker** (running)
+- **Docker** (running) — Docker Desktop on Windows/macOS is fine
 - **Python 3.10+** — stdlib only, no `pip install` needed
-- **Bash** (for `sample_resources.sh` — Git Bash works on Windows)
 - Ports **3001** and **3002** free
+
+Works on **Linux**, **macOS**, and **Windows native** (cmd / PowerShell). No WSL required.
 
 Pull the Kuma image once so the demo isn't spent on a download:
 
@@ -79,11 +80,13 @@ less tests/experimental/report/experimental_testing_report.md
 
 Open **two terminals** side by side.
 
-### Terminal A — resource sampler
+### Terminal A — resource sampler (cross-platform)
 ```bash
-tests/experimental/performance/sample_resources.sh 200 \
+python3 tests/experimental/performance/sample_resources.py 200 \
     tests/experimental/results/perf_demo_resources.csv
 ```
+> On Windows use `python` instead of `python3`. The bash version
+> (`sample_resources.sh`) is also available if you prefer.
 
 ### Terminal B — load runner
 ```bash
@@ -273,7 +276,7 @@ docker volume rm uptime-kuma  # only if you want a clean state
 | `Cannot connect to the Docker daemon` | Start Docker Desktop / `sudo systemctl start docker` |
 | `port is already allocated` | `docker rm -f uptime-kuma` and try again |
 | `python3: command not found` | Use `python` on Windows; on Linux install `python3` |
-| `bc: command not found` (resource sampler only) | Skip the sampler step — runner still produces full perf metrics |
+| `bc: command not found` (only if using the .sh sampler) | Use `sample_resources.py` instead — same output, no bash deps |
 | Mutation harness hangs after restart | Container failed to come back up — `docker logs uptime-kuma`, then run with `--id <one-id>` to isolate |
 | Chaos C3 reports connection-refused | Port 3002 is taken — `lsof -i :3002` and kill the holder |
 

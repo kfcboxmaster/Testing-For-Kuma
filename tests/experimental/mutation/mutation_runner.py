@@ -25,6 +25,7 @@ import argparse
 import json
 import os
 import subprocess
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -124,20 +125,37 @@ MUTANTS: List[Mutant] = [
 # --- Container helpers --------------------------------------------------------
 
 def docker_cp_out(src_in_container: str) -> str:
-    """Read a file from the container as text."""
+    """Read a file from the container as raw bytes, decode as UTF-8 with LF newlines.
+
+    We avoid `text=True` because on Windows it would translate the Linux LF
+    line endings to CRLF on read, which then makes our find/replace patterns
+    (which contain literal "\n") miss.
+    """
     out = subprocess.run(
         ["docker", "exec", CONTAINER, "cat", src_in_container],
-        capture_output=True, text=True, check=True
+        capture_output=True, check=True
     )
-    return out.stdout
+    return out.stdout.decode("utf-8")
 
 
 def docker_write(dest_in_container: str, content: str) -> None:
-    """Replace a file inside the container with the provided content."""
-    tmp = "/tmp/_mutation_payload"
-    with open(tmp, "w") as f:
-        f.write(content)
-    subprocess.run(["docker", "cp", tmp, f"{CONTAINER}:{dest_in_container}"], check=True)
+    """Replace a file inside the container with the provided content.
+
+    Uses tempfile (works on Windows + POSIX) and binary I/O with an explicit
+    UTF-8 + LF byte stream so Windows does not inject CRLF line endings into
+    the JS file we're about to copy back into a Linux container.
+    """
+    fd, tmp = tempfile.mkstemp(prefix="kuma_mut_", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(content.encode("utf-8"))
+        subprocess.run(["docker", "cp", tmp, f"{CONTAINER}:{dest_in_container}"],
+                       check=True, capture_output=True)
+    finally:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
 
 
 def docker_restart() -> None:
